@@ -17,17 +17,7 @@ TABLES = {
     "products": "olist_products_dataset.csv",
     "sellers": "olist_sellers_dataset.csv",
 }
-# NOTE: payments, reviews, geolocation, and category_translation are part of
-# the original Olist dataset but are NOT currently used anywhere in
-# transform.py's Star Schema build (dim_customers, dim_products, dim_sellers,
-# dim_date, fact_order_items). They're intentionally left out here to avoid
-# loading files that aren't needed. If you later extend transform.py to use
-# any of them (e.g. adding review scores to the fact table), add the
-# corresponding entry back to this dict:
-#   "payments": "olist_order_payments_dataset.csv",
-#   "reviews": "olist_order_reviews_dataset.csv",
-#   "geolocation": "olist_geolocation_dataset.csv",
-#   "category_translation": "product_category_name_translation.csv",
+
 
 
 def get_base_path():
@@ -37,13 +27,16 @@ def get_base_path():
     Priority:
       1. OLIST_DATA_PATH environment variable, if set.
       2. <project_root>/source_data/ — computed relative to this file's
-         location. Since extract.py lives directly in the project root
-         (alongside transform.py, load.py, main.py), this is simply
-         "./source_data/".
+         location. Since extract.py now lives in etl_scripts/ (one level
+         below the project root), this walks up two levels:
+         etl_scripts/extract.py -> etl_scripts/ -> project_root/ -> source_data/
     """
     base_path = os.environ.get(
         "OLIST_DATA_PATH",
-        os.path.join(os.path.dirname(os.path.abspath(__file__)), "source_data"),
+        os.path.join(
+            os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
+            "source_data",
+        ),
     )
     return base_path if base_path.endswith(os.sep) else base_path + os.sep
 

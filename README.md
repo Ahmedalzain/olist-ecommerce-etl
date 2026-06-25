@@ -23,7 +23,7 @@ This project encompasses a data engineering pipeline designed to process and ana
 
 The pipeline starts by ingesting raw data from CSV files using **Apache Spark** for distributed data processing. Following the ETL (Extract, Transform, Load) process, the data is cleaned, deduplicated, and restructured into a star schema, then stored in **PostgreSQL** under the `dwh` schema, which acts as the central data warehouse layer.
 
-The pipeline is split into three independent stages — `extract.py`, `transform.py`, and `load.py` — orchestrated by a single entry point, `main.py`.
+The pipeline is split into three independent stages — `etl_scripts/extract.py`, `etl_scripts/transform.py`, and `etl_scripts/load.py` — orchestrated by a single entry point, `etl_scripts/main.py`.
 
 ---
 
@@ -49,7 +49,7 @@ The pipeline is split into three independent stages — `extract.py`, `transform
 ```
 5. Run the pipeline:
 ```bash
-   python main.py
+   python etl_scripts/main.py
 ```
 
 ---
@@ -112,24 +112,29 @@ One critical issue surfaced during development: Spark's `monotonically_increasin
 
 ---
 
-## Project Structure 
+## Project Structure
 .
 
-├── main.py            # Entry point — orchestrates Extract → Transform → Load
+├── etl_scripts/
 
-├── extract.py         # Extract: reads raw CSV files
+│   ├── main.py         # Entry point — orchestrates Extract → Transform → Load
 
-├── transform.py       # Transform: builds dimensions, fact table, surrogate keys
+│   ├── extract.py      # Extract: reads raw CSV files
 
-├── load.py            # Load: truncates and writes to PostgreSQL
+│   ├── transform.py    # Transform: builds dimensions, fact table, surrogate keys
 
-├── source_data/       # Raw CSV input files
+│   └── load.py         # Load: truncates and writes to PostgreSQL
 
-├── data/               # Exported warehouse tables (post-load)
+├── source_data/        # Raw CSV input files
+
+├── data/                # Exported warehouse tables (post-load)
 
 └── docs/
 
 └── erd_diagram.png
+
+
+
 ---
 
 ## Data Source
